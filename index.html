@@ -3,16 +3,26 @@
 <head>
 	<title>Random Password Generator</title>
 	<style>
-		#password {
+		body {
 			text-align: center;
+		}
+		h1 {
+			font-family: sans-serif;
+		}
+
+		#password {
 			font-family: monospace;
-			font-size: 24px;
 		}
 	</style
 </head>
 <body>
-<div id=password></div>
+<h1>Here, have a password:</h1>
+<h2 id=password></h2>
+<button onclick="another()">Another!</button>
 <script type="text/javascript">
-	document.getElementById("password").innerText = btoa(String.fromCharCode.apply(this, crypto.getRandomValues(new Uint8Array(33))))
+	var another = function() {
+		document.getElementById("password").innerText = btoa(String.fromCharCode.apply(this, crypto.getRandomValues(new Uint8Array(33))));
+	}
+	another();
 </script>
 </body>
