@@ -4,6 +4,7 @@
 	<title>Random Password Generator</title>
 	<style>
 		body {
+			font-family: sans-serif;
 			text-align: center;
 		}
 		h1 {
@@ -18,10 +19,13 @@
 <body>
 <h1>Here, have a password:</h1>
 <h2 id=password></h2>
-<button onclick="another()">Another!</button>
+Length <input id='length' type="number" value="44"> <button onclick="another()">Another!</button>
 <script type="text/javascript">
 	var another = function() {
-		document.getElementById("password").innerText = btoa(String.fromCharCode.apply(this, crypto.getRandomValues(new Uint8Array(33))));
+	    var length = document.getElementById("length").value;
+		document.getElementById("password").innerText = btoa(String.fromCharCode.apply(this,
+			crypto.getRandomValues(new Uint8Array(Math.ceil(length / 4) * 3))))
+			.replace(/[+]/g, '-').replace(/[/]/g, '_').substr(0, length);
 	}
 	another();
 </script>
