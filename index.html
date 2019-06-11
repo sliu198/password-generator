@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Random Password Generator</title>
-    <style>
+    <style type="text/css">
         body {
             font-family: sans-serif;
             text-align: center;
@@ -14,13 +14,17 @@
         #password {
             font-family: monospace;
         }
-    </style
+
+        input, label, button {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
 <h1>Here, have a password:</h1>
 <h2 id=password></h2>
-Length <input id='length' type="number" value="44"> <button onclick="another()">Another!</button><br/>
-<input id="words" type="checkbox" onclick="switchMode()"/><label for="words">Words</label>
+<label for="length">Length</label> <input id='length' type="number" value="44"> <button onclick="another()">Another!</button><br/>
+<input id="words" type="checkbox" onclick="switchMode()"/> <label for="words">Words</label>
 <script type="text/javascript" src="words.js"></script>
 <script type="text/javascript">
     var another = function() {
