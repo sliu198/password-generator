@@ -24,14 +24,23 @@
 <h1>Here, have a password:</h1>
 <h2 id=password></h2>
 <label for="length">Length</label> <input id='length' type="number" value="44"> <button onclick="another()">Another!</button><br/>
-<input id="words" type="checkbox" onclick="switchMode()"/> <label for="words">Words</label>
+<label for="mode">Mode</label>
+<select id="mode" onchange="switchMode()">
+    <option value="char" selected>Characters</option>
+    <option value="words">Words</option>
+    <option value="num">Digits</option>
+</select>
 <script type="text/javascript" src="words.js"></script>
 <script type="text/javascript">
+    var thisCrypto = window.crypto || window.msCrypto;
+
     var another = function() {
         var length = Number.parseInt(document.getElementById("length").value);
         var passwordEl = document.getElementById("password");
-        if (document.getElementById("words").checked) {
-            var data = crypto.getRandomValues(new Uint8Array(Math.ceil(length * 3 / 2)));
+        var mode = document.getElementById("mode").value;
+        var data;
+        if (mode === 'words') {
+            data = thisCrypto.getRandomValues(new Uint8Array(Math.ceil(length * 3 / 2)));
             passwordEl.innerText = new Array(length).fill().map(function(_,i) {
                 var extra = data[length + (i >> 1)];
                 if (i % 2) {
@@ -43,17 +52,29 @@
             }).map(function(i) {
                 return words[i];
             }).join('_');
-        } else {
+        } else if (mode === 'char') {
             passwordEl.innerText = btoa(String.fromCharCode.apply(this,
-                crypto.getRandomValues(new Uint8Array(Math.ceil(length / 4) * 3))))
+                thisCrypto.getRandomValues(new Uint8Array(Math.ceil(length / 4) * 3))))
                 .replace(/[+]/g, '-').replace(/[/]/g, '_').substr(0, length);
+        } else if (mode === 'num') {
+            data = thisCrypto.getRandomValues(new Uint8Array(length));
+            console.log(data.join());
+            data.forEach((d, i) => {
+                while (data[i] < 6) {
+                    data[i] = thisCrypto.getRandomValues(new Uint8Array(1))[0];
+                }
+            });
+            passwordEl.innerText = data.map(d => d % 10).join('');
+            console.log(data.join());
         }
     };
     var switchMode = function() {
-        if (document.getElementById("words").checked) {
-            document.getElementById("length").value = 6;
-        } else {
+        var mode = document.getElementById("mode").value;
+
+        if (mode === 'char') {
             document.getElementById("length").value = 44;
+        } else {
+            document.getElementById("length").value = 6;
         }
     };
     another();
