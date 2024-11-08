@@ -40,18 +40,14 @@
         var mode = document.getElementById("mode").value;
         var data;
         if (mode === 'words') {
-            data = thisCrypto.getRandomValues(new Uint8Array(Math.ceil(length * 3 / 2)));
-            passwordEl.innerText = new Array(length).fill().map(function(_,i) {
-                var extra = data[length + (i >> 1)];
-                if (i % 2) {
-                    extra = extra >> 4;
-                } else {
-                    extra = extra & 15;
-                }
-                return (data[i] << 4) + extra;
-            }).map(function(i) {
-                return words[i];
-            }).join('_');
+            var chosen_words = [];
+            while (words.length < length) {
+                data = thisCrypto.getRandomValues(new Uint16Array(1))[0];
+                if (Math.floor(data / 1296) >= 50) continue;
+
+                chosen_words.push(words[data % 1296]);
+            }
+            passwordEl.innerText = chosen_words.join(' ');
         } else if (mode === 'char') {
             passwordEl.innerText = btoa(String.fromCharCode.apply(this,
                 thisCrypto.getRandomValues(new Uint8Array(Math.ceil(length / 4) * 3))))
@@ -73,8 +69,10 @@
 
         if (mode === 'char') {
             document.getElementById("length").value = 44;
-        } else {
+        } else if (mode === 'num') {
             document.getElementById("length").value = 6;
+        } else {
+            document.getElementById("length").value = 7;
         }
     };
     another();
