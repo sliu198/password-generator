@@ -41,7 +41,7 @@
         var data;
         if (mode === 'words') {
             var chosen_words = [];
-            while (words.length < length) {
+            while (chosen_words.length < length) {
                 data = thisCrypto.getRandomValues(new Uint16Array(1))[0];
                 if (Math.floor(data / 1296) >= 50) continue;
 
